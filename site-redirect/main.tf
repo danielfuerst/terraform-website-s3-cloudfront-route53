@@ -22,7 +22,7 @@
 data "template_file" "bucket_policy" {
   template = "${file("${path.module}/website_redirect_bucket_policy.json")}"
 
-  vars {
+  vars = {
     bucket = "site.${replace("${replace("${var.domain}",".","-")}","*","star")}"
     secret = "${var.duplicate-content-penalty-secret}"
   }
@@ -76,7 +76,7 @@ resource "aws_cloudfront_distribution" "website_cdn" {
   price_class  = "${var.price_class}"
   http_version = "http2"
 
-  "origin" {
+  origin {
     origin_id   = "origin-bucket-${aws_s3_bucket.website_bucket.id}"
     domain_name = "${aws_s3_bucket.website_bucket.website_endpoint}"
 
@@ -102,11 +102,11 @@ resource "aws_cloudfront_distribution" "website_cdn" {
     response_page_path    = "/404.html"
   }
 
-  "default_cache_behavior" {
+  default_cache_behavior {
     allowed_methods = ["GET", "HEAD", "DELETE", "OPTIONS", "PATCH", "POST", "PUT"]
     cached_methods  = ["GET", "HEAD"]
 
-    "forwarded_values" {
+    forwarded_values {
       query_string = false
 
       cookies {
@@ -124,13 +124,13 @@ resource "aws_cloudfront_distribution" "website_cdn" {
     compress               = true
   }
 
-  "restrictions" {
-    "geo_restriction" {
+  restrictions {
+    geo_restriction {
       restriction_type = "none"
     }
   }
 
-  "viewer_certificate" {
+  viewer_certificate {
     acm_certificate_arn      = "${var.acm-certificate-arn}"
     ssl_support_method       = "sni-only"
     minimum_protocol_version = "TLSv1"

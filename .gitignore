@@ -4,3 +4,6 @@
 # Compiled files
 *.tfstate
 *.tfstate.backup
+
+###PHPStorm
+.idea
