@@ -51,12 +51,3 @@ variable "price_class" {
   description = "CloudFront price class"
   default     = "PriceClass_200"
 }
-
-variable "lambda_function_association_arn" {
-  description = "Required lambda function association arn"
-}
-
-variable "lambda_function_association_event_type" {
-  description = "Required lambda function association event type"
-}
-
